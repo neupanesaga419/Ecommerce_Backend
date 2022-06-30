@@ -15,7 +15,8 @@ def week_day_sales(user_model,user_date=None):
     return total_sold_yesterday,total_profit_yesterday
 
     
-def find_item_n_amount(mymodel,user_date=None):
+def find_item_n_amount(mymodel,user_date=None,list_return=None):
+    
     if user_date==None:
         sold_products = mymodel.objects.all()
     else:
@@ -36,12 +37,34 @@ def find_item_n_amount(mymodel,user_date=None):
 
     most_sold_item = None
     most_sold_item_amount = 0
+    
+    
+    
     for key,value in product_amount_sold_in_day.items():
         if most_sold_item_amount < value:
             most_sold_item = Products.objects.get(id=key)
             most_sold_item_amount = value
+            
+    if list_return == None:
+        
+        return most_sold_item,most_sold_item_amount
+    else:
+        sorted_product_amount_sold = dict(sorted(product_amount_sold_in_day.items(),key = lambda kv:kv[1]))
+
+        dict_len = len(sorted_product_amount_sold)
+        list_key = list(sorted_product_amount_sold)
+        
+        for item in list_key[:dict_len-list_return]:
+            sorted_product_amount_sold.pop(item)
+        
+        most_sold_item_list = {}
+        
+        for key,value in sorted_product_amount_sold.items():
+            most_sold_item_list[Products.objects.get(id=key)] = value
+
+        print(most_sold_item_list)
+        return most_sold_item_list
     
-    return most_sold_item,most_sold_item_amount
 
 
 def most_expensive_costly():
@@ -108,5 +131,25 @@ def seven_back_days_generator():
 
 
 def most_profit_given():
-    products = SoldProduct.objects.all()
+    products = SoldProducts.objects.all()
+    profit_earned = {}
+    idsset = set()
+    for item in products:
+        idsset.add(item.product_sold.id)
     
+    for id in idsset:
+        total_profit = 0
+        for item in products:
+            if item.product_sold.id == id:
+                total_profit = total_profit + item.total_profit_or_loss()
+        profit_earned[id] = total_profit
+    
+    highest_profit = 0
+    item = None
+    
+    for key,value in profit_earned.items():
+        if highest_profit < value:
+            highest_profit = value
+            item = Products.objects.get(id=key)
+                    
+    return item.product_name,highest_profit

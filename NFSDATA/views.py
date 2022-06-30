@@ -15,6 +15,7 @@ from .helpers import week_day_sales,find_item_n_amount,seven_back_days_generator
 import NFSDATA.helpers as hp
 import NFSDATA.yearmonth as ym
 
+
 @method_decorator(login_required(login_url="signin"),name="dispatch")
 class DashboardView(TemplateView):
     from datetime import datetime,timedelta
@@ -93,16 +94,20 @@ class DashboardView(TemplateView):
             context["most_sold_item_till_now"],context["most_sold_item_amount_till_now"] = item,amount
             context["most_sold_item_cost"] = "Rs {:,.2f}".format(item.product_cost_price)
             
-            # MOST PROFIT GIVEN ITEMS
-            context["most_profit_given_item"] = None
-            context["profit_given_by_item"] = None
+            # MOST PROFIT Giving ITEMS
+            most_profit_given_item,profit_given_by_item = hp.most_profit_given()
+            context["most_profit_given_item"],context["profit_given_by_item"] = most_profit_given_item,"Rs {:,.2f}".format(profit_given_by_item)
+            
             
             # Expensive and Costly Item
             expensive_item,costly_item = hp.most_expensive_costly()
             context["most_expensive_item"],context["most_costly_item"] = expensive_item,costly_item
             context["most_expensive_item_cost"],context["most_costly_item_cost"] = "Rs {:,.2f}".format(expensive_item.product_cost_price),"Rs {:,.2f}".format(costly_item.product_cost_price)
             
-            
+            sagar = hp.find_item_n_amount(SoldProducts,list_return=5)
+
+            context["top_five_items"] = sagar
+            context["date"] = self.datetime.today()
 
         else:
             context["product_found"] = False
