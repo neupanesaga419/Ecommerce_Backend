@@ -270,6 +270,7 @@ class SoldFormView(SuccessMessageMixin,FormView):
     
     def form_valid(self,form):
         product_obj = Products.objects.get(id=self.kwargs['id'])
+        
         if product_obj.product_amount >= form.cleaned_data["product_amount_sold"]:
             product_obj.sold(form.cleaned_data["product_amount_sold"])
             product_obj.save()
@@ -284,13 +285,38 @@ class SoldFormView(SuccessMessageMixin,FormView):
             messages.success(self.request,message)
             return redirect("search_products",0)
         else:
+            
             mydata = form.cleaned_data["product_amount_sold"]
-            print("Hello World")
+            # print("Hello World")
             message = "हामी सङ्ग जम्मा ",product_obj.product_amount, " ओटा सामान छ  र  हजुर ले ",mydata,"ओटा सामान बेचे भनेर पठाउनु भयको छ । कृपया पुनः चेक गरेर पठाउनु होस् । धन्यबाद ! "
             messages.success(self.request,message)
             return redirect("sold_form",self.kwargs['id'])
         return super().form_valid(form)
 
+@method_decorator(login_required(login_url="signin"),name="dispatch")
+class SoldUpdateView(SuccessMessageMixin,UpdateView):
+    model = SoldProducts
+    template_name = "pages/sold_items.html"
+    form_class = SoldProductsFrom
+    
+    # success_message = "Successfully Updated"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        soldproducts = SoldProducts.objects.get(id=self.kwargs['pk'])
+        context["product"] = Products.objects.get(id=soldproducts.product_sold.id)
+        return context
+    
+    def form_valid(self, form):
+        soldproducts = SoldProducts.objects.get(id=self.kwargs['pk'])
+        product_obj = Products.objects.get(id=soldproducts.product_sold.id)
+        if product_obj.product_amount >= form.cleaned_data["product_amount_sold"]:
+            return redirect("view_sold_products",0)
+        else:
+            success_message = "The Products Number Provided is very high in number as compared to those we have"
+            return redirect("sold_products_update",self.kwargs['pk'])
+            
+    
 
 @method_decorator(login_required(login_url="signin"),name="dispatch")
 class SoldProductsView(ListView):

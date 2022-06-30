@@ -72,6 +72,9 @@ class Products(models.Model):
     def cost_item(self):
         return self.product_amount * self.product_cost_price
     
+    
+    
+    
     def __str__(self):
         return self.product_name
     
@@ -84,6 +87,8 @@ class SoldProducts(models.Model):
     
     def total_on_each_item(self):
         return self.product_selling_price * self.product_amount_sold
+    
+    
     
     def profit_or_loss_per_piece(self):
         cost_price = self.product_sold.product_cost_price
