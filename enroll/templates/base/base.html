@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  {% load static %}
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="{% static 'img/apple-icon.png'%}">
+  <link rel="icon" type="image/png" href="{% static 'img/favicon.png'%}">
+  <title>
+    NFS DASHBOARD
+  </title>
+  {% include 'base/link.html' %}
+  {% block extralinks %}{% endblock extralinks %}
+</head>
+
+<body class="g-sidenav-show  bg-gray-200">
+
+{% comment %} sidebar {% endcomment %}
+
+{% include 'base/sidebar.html' %}
+
+
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+    {% comment %} Navbar  {% endcomment %}
+    {% include "base/navbar.html" %}
+  
+    {% comment %} Content Changes When Link Changes {% endcomment %}
+    <div class="container-fluid py-4">
+
+
+      {% block content %}
+
+      {% endblock content %}
+
+
+      {% comment %} Footer {% endcomment %}
+      {% include "base/footer.html" %}
+
+    </div>
+  </main>
+
+{% comment %} Plugin {% endcomment %}
+
+{% include 'base/plugin.html' %}
+
+{% include 'base/script.html' %}
+{% block extrascripts %}{% endblock extrascripts %}
+</body>
+
+</html>

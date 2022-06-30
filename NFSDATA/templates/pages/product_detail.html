@@ -1,0 +1,35 @@
+
+{% extends 'base/base.html' %}
+
+
+{% block content %}
+      <div class="row">
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <h2 {% if message.tags %} class="{{ message.tags }} text-warning"{% endif %}>{{ message }}</h2>
+            {% endfor %}
+        </div>
+      {% endif %}
+        <div class="col-12">
+          <div class="card my-4">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+              <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+                <h6 class="text-white text-capitalize ps-3" style="display:inline-block;">Is This The Product You Want?</h6>
+              </div>
+            </div>
+            <div class="card-body px-0 pb-2">
+                <div class="row">
+                    <div class="col-sm-8 offset-sm-1">
+                        <table class=""></table>
+                    </div>
+                </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+      </div>
+    
+{% endblock content %}

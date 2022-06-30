@@ -1,0 +1,62 @@
+{% extends 'base/base.html' %}
+
+
+{% block content %}
+
+        <div class="col-12">
+
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <h3 {% if message.tags %} class="{{ message.tags }} text-warning"{% endif %}>{{ message }}</h3>
+                {% endfor %}
+            </div>
+          {% endif %}
+          <div class="card my-4">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+              <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+                <h6 class="text-white text-capitalize ps-3" style="display:inline-block;">Add Sold Products</h6>
+              </div>
+            </div>
+            <div class="card-body px-0 pb-2">
+                <div class="row">
+                    <div class="col-sm-6 offset-sm-2">
+                        <div class="table-responsive p-0 m-4">
+                            <form role="form" class="form" method="POST" novalidate enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <h3>Your Product Name is {{product}}</h3>
+                                <h4>The Cost Price is {{product.product_cost_price}}</h4>
+                                <h4>The Amount Present is {{product.product_amount}}</h4>
+                                {% if form.non_field_errors %}
+                                <p class="card-text text-danger m-2">{{form.non_field_errors}}</p>
+                                {% endif %}
+                                {% for field in form %}
+                                <div>
+                                  <label for="{{field.auto_id}}}" class="p-2">{{field.label}}</label><br>
+                                  {% if field.errors %} 
+                                  <small class="errors text-danger" class="p-2">{{field.errors|striptags}}</small><br>
+                                  {% endif %}
+                                  <div class="border border-info rounded">
+                                    {{field}}
+                                  </div>
+                                  
+                                </div>
+                                {% endfor %}
+                                <div class="text-center">
+                                  <input type="submit" value="Sold" class="btn bg-gradient-primary w-100 my-4 mb-2">
+                                </div>
+          
+                              </form>
+            
+                          </div>
+                    </div>
+                </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+      </div>
+    
+{% endblock content %}

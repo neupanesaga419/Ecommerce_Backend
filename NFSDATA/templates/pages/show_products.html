@@ -1,0 +1,124 @@
+
+{% extends 'base/base.html' %}
+
+
+{% block content %}
+      <div class="row">
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <h2 {% if message.tags %} class="{{ message.tags }} text-warning"{% endif %}>{{ message }}</h2>
+            {% endfor %}
+        </div>
+      {% endif %}
+        <div class="col-12">
+          <div class="card my-4">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+              <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+                <h6 class="text-white text-capitalize ps-3" style="display:inline-block;">All Products</h6>
+                <a href="{% url 'create_product' %}" class="btn btn-danger text-uppercase ps-3 ml-5">Add Products</a>
+              </div>
+            </div>
+            <div class="card-body px-0 pb-2">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0">
+                  <thead>
+                    <tr>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Id</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Amount</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Price</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Category</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">SubCategory</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Size Availiable</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gender</th>
+                      <th class="text-secondary opacity-7">Action</th>
+                    
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for item in object_list %}
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">{{item.id}}</h6>
+                            <p class="text-xs text-secondary mb-0"></p>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <a href="{% url 'products_details' item.id %}"><span class="badge badge-sm bg-gradient-info">{{item.product_name}}</span></a>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-primary">{{item.product_amount}}</span>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-success">{{item.product_cost_price}}</span>
+                      </td>
+                      <td>
+                        <p class="text-xs font-weight-bold mb-0">{{item.product_category}}</p>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-success">{{item.product_subcategory}}</span>
+                      </td>
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-xs font-weight-bold">{{item.product_size_availiable}}</span>
+                      </td>
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-xs font-weight-bold">{{item.product_gender}}</span>
+                      </td>
+                      <td class="align-middle">
+                        <a href="{% url 'update_products' item.id %}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                          Edit
+                        </a>
+                      </td>
+                    </tr>
+                    {% endfor %}
+
+                  </tbody>
+
+
+                </table>
+              </div>
+
+            </div>
+            <div class="container mt-3 mb-3">
+              <div class="row">
+                <div class="col-sm-3 offset-sm-5">
+                  <div class="row">
+                    
+                    <div class="col-sm-4 border border-info p-1 text-center">
+                      
+                      {% if page_obj.has_previous %}
+                        <a href="?page={{page_obj.previous_page_number}}" class="page-link">Previous</a>
+                        {% else %}
+                        <a href="" class="page-link">No Previous</a>
+                      {% endif %}
+                    </div>
+                    
+                    <div class="col-sm-4 border border-info p-1 text-center">
+                      <span >{{page_obj.number}}</span>
+                    </div>
+                    <div class="col-sm-4 border border-info p-1 text-center">
+                      
+                      {% if page_obj.has_next %}
+                        <a href="?page={{page_obj.next_page_number}}" class="page-link">Next</a>
+                        {% else %}
+                        <a href="" class="page-link">No Next</a>
+                      {% endif %}
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        
+      </div>
+
+      </div>
+    
+{% endblock content %}

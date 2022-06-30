@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    {% for category in cateogry_list %}
+        <ul>
+            <li>{{category.id}}</li>
+            <li>{{category.category_name}}</li>
+        </ul>
+    {% endfor %}
+
+{% for subcat in subcategory_list %}
+
+<ul>
+    <li>{{subcat.id}}</li>
+    <li>{{subcat.category}}</li>
+    <li>{{subcat.sub_cat_name}}</li>
+    <li>{{subcat.sub_cat_details}}</li>
+</ul>
+
+{% endfor %}
+</body>
+</html>
+

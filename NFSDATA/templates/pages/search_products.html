@@ -1,0 +1,75 @@
+
+{% extends 'base/base.html' %}
+
+
+{% block content %}
+      <div class="row">
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <h3 {% if message.tags %} class="{{ message.tags }} text-warning"{% endif %}>{{ message }}</h3>
+            {% endfor %}
+        </div>
+      {% endif %}
+        <div class="col-12">
+          <div class="card my-4">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+              <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+                <h6 class="text-white text-capitalize ps-3" style="display:inline-block;">Search Products</h6>
+              </div>
+            </div>
+            <div class="card-body px-0 pb-2">
+                <div class="row">
+                    <div class="col-sm-6 offset-sm-2">
+                        <div class="table-responsive p-0 m-4">
+                            <form class="form-inline m-5 p-5 text-center" method="POST" novalidate>
+                                {% csrf_token %}
+                                <input class="form-control mr-sm-2 border border-primary p-2 m-2" required type="number" name="searched" placeholder="Enter ID of Product" aria-label="Search">
+                                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                              </form>
+            
+                          </div>
+                    </div>
+                    {% if method %}
+                    <div class="col-sm-8 offset-sm-1">
+                      <table class="table table-bordered">
+
+                          {% if found %}
+                          <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Image</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Amount</th>
+                            <th>Action</th>
+                          </tr>
+                          <tr>
+                              <td>{{product_detail.id}}</td>
+                              <td>{{product_detail.product_name}}</td>
+                              <td><a href="{{product_detail.product_image.url}}" target="_blank">{{product_detail.product_image}}</a></td>
+                              <td>{{product_detail.product_category}}</td>
+                              <td>{{product_detail.product_cost_price}}</td>
+                              <td>{{product_detail.product_amount}}</td>
+                              <td><a href="{% url 'sold_form' product_detail.id %}" class="btn btn-warning">Add to Selling</a></td>
+                          </tr>
+                          {% else %}
+                          <thead><h1>{{message}}</h1></thead>
+                          
+                          {% endif %}
+                       
+
+                      </table>
+
+                    </div>
+                    {% endif %}
+                </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+      </div>
+    
+{% endblock content %}

@@ -1,0 +1,103 @@
+
+{% extends 'base/base.html' %}
+
+
+{% block content %}
+      <div class="row">
+
+        <div class="col-12">
+          <div class="card my-4">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+              <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+                <h6 class="text-white text-capitalize ps-3" style="display:inline-block;">Product  Detail </h6>
+              </div>
+            </div>
+            <div class="card-body px-0 pb-2">
+                  {% if data_exists%}
+                    <!-- Page Content -->
+                        <div class="container">
+
+                            <!-- Portfolio Item Heading -->
+                            <h1 class="my-4">{{product_detail.product_name}}</small>
+                            </h1>
+                        
+                            <!-- Portfolio Item Row -->
+                            <div class="row">
+                        
+                            <div class="col-md-8">
+                                <img class="img-fluid" src="{{product_detail.product_image.url}}" alt="" height="750px" width="500px">
+                            </div>
+                        
+                            <div class="col-md-4">
+                                <h3 class="my-3">Description</h3>
+                                <p>{{product_detail.product_category.cateogry_details}} |
+                                    {{product_detail.product_subcategory.sub_cat_details}}</p>
+                                <h3 class="my-3">Product Details</h3>
+                                <ul>
+                                <li>Category: {{product_detail.product_category}}</li>
+                                <li>Sub Category: {{product_detail.product_subcategory}}</li>
+                                <li>Size Availiable: {{product_detail.product_size_availiable}}</li>
+                                <li>Age Group: {{product_detail.product_age_groups}}</li>
+                                <li>Gender Related: {{product_detail.product_gender}}</li>
+                                <li>Created at : {{product_detail.created_on}}</li>
+                                </ul>
+                            </div>
+                        
+                            </div>
+                            <!-- /.row -->
+                        
+                            <!-- Related Projects Row -->
+                            <h3 class="my-4">Related Products</h3>
+                        
+                            <div class="row">
+                        
+                            <div class="col-md-3 col-sm-6 mb-4">
+                                <a href="#">
+                                    <img class="img-fluid" src="https://via.placeholder.com/500x300" alt="">
+                                    </a>
+                            </div>
+                        
+                            <div class="col-md-3 col-sm-6 mb-4">
+                                <a href="#">
+                                    <img class="img-fluid" src="https://via.placeholder.com/500x300" alt="">
+                                    </a>
+                            </div>
+                        
+                            <div class="col-md-3 col-sm-6 mb-4">
+                                <a href="#">
+                                    <img class="img-fluid" src="https://via.placeholder.com/500x300" alt="">
+                                    </a>
+                            </div>
+                        
+                            <div class="col-md-3 col-sm-6 mb-4">
+                                <a href="#">
+                                    <img class="img-fluid" src="https://via.placeholder.com/500x300" alt="">
+                                    </a>
+                            </div>
+                        
+                            </div>
+                            <!-- /.row -->
+                        
+                        </div>
+                        <!-- /.container -->
+                  {% else %}
+                    {% if messages %}
+                    <div class="container">
+                      <div class="messages">
+                          {% for message in messages %}
+                          <h1 {% if message.tags %} class="{{ message.tags }} text-warning"{% endif %}>{{ message }}</h1>
+                          {% endfor %}
+                      </div>
+                  </div>
+                  {% endif %}
+                  {% endif %}
+                </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+      </div>
+    
+{% endblock content %}

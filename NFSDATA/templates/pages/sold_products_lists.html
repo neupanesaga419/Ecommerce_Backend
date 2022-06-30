@@ -1,0 +1,151 @@
+
+{% extends 'base/base.html' %}
+
+
+{% block content %}
+      <div class="row">
+
+        <div class="col-12">
+          <div class="card my-4">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+              <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+                <div class="offset-sm-4 col-sm-5">
+                  <h3 class="text-white text-capitalize ps-3" style="display:inline-block;">All Sold Products</h3>
+                </div>
+                <div class="offset-sm-4 col-sm-5">
+                  <a href="{% url 'search_products' id=0 %}" class="btn btn-danger text-uppercase m-5">Add New Sold Products</a>
+                </div>
+                <div class="offset-sm-4 col-sm-3 text-center">
+                  <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="form-outline">
+                      <input type="date" id="search" name="date" class="form-control border border-warning bg-light p-2" placeholder="Enter Date You Want To Search" />
+                    </div>
+                    <button type="submit" class="btn btn-warning mt-3">
+                      <i class="fas fa-search"></i>
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="card-body px-0 pb-2">
+              {% if product_found %}
+              <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0">
+                  <thead>
+                    <tr>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Id</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Product Name</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Product Amount Sold</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Product Selling Price</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Total</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Profit Per Piece</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total Profit</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date Added</th>
+                      <th class="text-secondary opacity-7">Action</th>
+                    
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for item in page_obj %}
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">{{item.id}}</h6>
+                            <p class="text-xs text-secondary mb-0"></p>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <a href="{% url 'products_details' item.product_sold.id %}"><span class="badge badge-sm bg-gradient-info">{{item.product_sold}}</span></a>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-primary">{{item.product_amount_sold}}</span>
+                      </td>
+                      <td class="align-middle text-center text-sm">Rs 
+                        <span class="badge badge-sm bg-gradient-success">{{item.product_selling_price}}</span>
+                      </td>
+                      <td class="align-middle text-center text-sm">Rs
+                        <span class="badge badge-sm bg-gradient-danger"> {{item.total_on_each_item}}</span>
+                      </td>
+                      <td class="align-middle text-center text-sm">Rs
+                        <span class="badge badge-sm bg-gradient-danger"> {{item.profit_or_loss_per_piece}}</span>
+                      </td>
+                      <td class="align-middle text-center text-sm">Rs
+                        <span class="badge badge-sm bg-gradient-danger"> {{item.total_profit_or_loss}}</span>
+                      </td>
+                      <td>
+                        <p class="text-xs font-weight-bold mb-0">{{item.added_date}}</p>
+                      </td>
+                      
+                      <td class="align-middle">
+                        <a href="{% url 'update_products' item.id %}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                          Edit
+                        </a>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                    {% if grand_total %}
+                    <tr>
+                      <th colspan=2></th>
+                      <th colspan=2 class="text-center">Total Cost Sold</th>
+                      <th>Rs.{{total_sold}}</th>
+                      {% if profit %}
+                      <th class="text-center">Profit</th>
+                      {%else%}
+                      <th class="text-center">Loss</th>
+                      {%endif%}
+                      <td class="text-center">Rs. {{total_profit}}</td>
+                      
+                      
+                    </tr>
+                    {% endif %}
+                  </tbody>
+                </table>
+              </div>
+              {% if is_paginated %}
+              <div class="row">
+                <div class="offset-sm-5 col-sm-4 mt-3 mb-3">
+                  <div class="row">
+
+                    <div class="col-sm-4 border-top border-right border-bottom border-warning text-center">
+                      
+                      {% if page_obj.has_previous %}
+                      <a href="?page={{page_obj.previous_page_number}}">Previous</a>
+                      {%else%}
+                      <small>No Previous</small>
+                      {%endif%}
+                    </div>
+                    <div class="col-sm-4 border border-warning text-center">
+                      <small>{{page_obj.number}}</small>
+                    </div>
+
+                    <div class="col-sm-4 border-top border-left border-bottom border-warning text-center">
+                      {% if page_obj.has_next %}
+                        <a href="?page={{page_obj.next_page_number}}">Next</a>
+                      {%else%}
+                        <small>No Next</small>
+                      {%endif%}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {%endif%}
+              {% else %}
+                {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                    <h2 {% if message.tags %} class="{{ message.tags }} text-warning text-center"{% endif %}>{{ message }}</h2>
+                    {% endfor %}
+                </div>
+              {% endif %}
+              {% endif %}
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    
+{% endblock content %}

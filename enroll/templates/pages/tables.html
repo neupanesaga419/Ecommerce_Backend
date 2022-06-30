@@ -1,0 +1,126 @@
+
+{% extends 'base/base.html' %}
+
+
+{% block content %}
+      <div class="row">
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <h2 {% if message.tags %} class="{{ message.tags }} text-warning"{% endif %}>{{ message }}</h2>
+            {% endfor %}
+        </div>
+      {% endif %}
+        <div class="col-12">
+          <div class="card my-4">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+              <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+                <h6 class="text-white text-capitalize ps-3" style="display:inline-block;">Category</h6>
+                <a href="{% url 'create_category' %}" class="btn btn-danger text-uppercase ps-3 ml-5">Add Category</a>
+              </div>
+            </div>
+            <div class="card-body px-0 pb-2">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0">
+                  <thead>
+                    <tr>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Id</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Details</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Created On</th>
+                      <th class="text-secondary opacity-7">Action</th>
+                    
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for category in category_list %}
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">{{category.id}}</h6>
+                            <p class="text-xs text-secondary mb-0"></p>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <p class="text-xs font-weight-bold mb-0">{{category.cateogry_details}}</p>
+                      </td>
+                      <td class="align-middle text-center text-sm">
+                        <span class="badge badge-sm bg-gradient-success">{{category.category_name}}</span>
+                      </td>
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-xs font-weight-bold">{{category.created_on}}</span>
+                      </td>
+                      <td class="align-middle">
+                        <a href="{% url 'update_category' category.id %}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                          Edit
+                        </a>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="card my-4">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+              <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+                <h6 class="text-white text-capitalize ps-3" style="display:inline-block;">Sub Category</h6>
+                <a href="{% url 'create_subcategory' %}" class="btn btn-danger text-uppercase ps-3 ml-5">Add SubCategory</a>
+              </div>
+              
+            </div>
+            <div class="card-body px-0 pb-2">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center justify-content-center mb-0">
+                  <thead>
+                    <tr>
+                      <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ID</th>
+                      <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Sub Category Details</th>
+                      <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">SubCategory Name</th>
+                      <th class="text-uppercase text-secondary text-xs font-weight-bolder text-center opacity-7 ps-2">Created On</th>
+                      <th class="text-uppercase text-secondary text-xs font-weight-bolder text-center opacity-7 ps-2" >Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for subcat in subcategory_list %}
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2">
+                          <div class="my-auto">
+                            <h6 class="mb-0 text-sm">{{subcat.id}}</h6>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <p class="text-sm font-weight-bold mb-0">{{subcat.sub_cat_details}}</p>
+                      </td>
+                      <td>
+                        <span class="text-xs font-weight-bold">{{subcat.sub_cat_name}}</span>
+                      </td>
+                      <td class="align-middle text-center">
+                        <span class="text-xs font-weight-bold">{{subcat.created_on}}</span>
+                      </td>
+                      <td class="align-middle">
+                        <a href="{% url 'update_subcategory' subcat.id %}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                          Edit
+                        </a>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+{% endblock content %}
+      
