@@ -104,3 +104,9 @@ def seven_back_days_generator():
         
     return seven_day_starting_today,labels
  
+ 
+
+
+def most_profit_given():
+    products = SoldProduct.objects.all()
+    
