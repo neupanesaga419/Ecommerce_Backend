@@ -50,7 +50,7 @@ class Products(models.Model):
     product_image = ContentRestrictiononFileField(
         upload_to = "products/",
         default=None,
-        max_upload_size=2500000,
+        max_upload_size=5000000,
         content_types = ["image/jpeg","image/png","image/JPG","image/jpg"],
                                                   )
     product_category = models.ForeignKey(Category, on_delete=models.SET_NULL,null=True,default="No Category")

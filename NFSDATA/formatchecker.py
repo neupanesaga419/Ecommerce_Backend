@@ -18,8 +18,8 @@ class ContentRestrictiononFileField(FileField):
         # print("Your File",file)
         try:
             content_type = file.content_type
-            print("Uploaded File Content Type",content_type)
-            print("Our Restrictions On content types",self.content_types)
+            # print("Uploaded File Content Type",content_type)
+            # print("Our Restrictions On content types",self.content_types)
             
             print(content_type in self.content_types)
             # print(file.size)

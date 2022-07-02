@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-h+h(ri!g1(vw98r+od8x2bz9ui#cvj&sz=gxpyv@l8!4l%ecwm
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost","192.168.1.65"]
 
 
 # Application definition
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'enroll',
     'NFSDATA',
+    'FileGenerators',
 ]
 
 MIDDLEWARE = [
@@ -135,7 +136,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR,"media")
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = "/signin"
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/nfs"
 LOGOUT_REDIRECT_URL = "/signin"
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

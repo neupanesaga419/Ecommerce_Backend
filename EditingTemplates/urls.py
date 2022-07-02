@@ -25,6 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("",include("enroll.urls")),
     path("nfs/",include("NFSDATA.urls")),
+    path("file_generator/",include("FileGenerators.urls")),
 
 ]
 

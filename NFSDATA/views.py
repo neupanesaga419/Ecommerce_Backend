@@ -31,8 +31,10 @@ class DashboardView(TemplateView):
         seven_days,labels = seven_back_days_generator()
         num_prod_today = Products.objects.filter(date_added=seven_days[0]).count()
         num_prod_yesterday = Products.objects.filter(date_added=seven_days[1]).count()
-        
-        percentage_change_in_number_added_prod = round((num_prod_today - num_prod_yesterday)/(num_prod_today + num_prod_yesterday) * 100)
+        if num_prod_yesterday + num_prod_today == 0:
+            percentage_change_in_number_added_prod = 0
+        else:
+            percentage_change_in_number_added_prod = round((num_prod_today - num_prod_yesterday)/(num_prod_today + num_prod_yesterday) * 100)
 
         if SoldProducts.objects.filter(added_date=seven_days[0]).exists():            
             most_sold_item,most_sold_item_amount = find_item_n_amount(SoldProducts,seven_days[0])
@@ -108,6 +110,8 @@ class DashboardView(TemplateView):
 
             context["top_five_items"] = sagar
             context["date"] = self.datetime.today()
+            context["active_dashboard"],context["bg_dashboard"] = "active","bg-gradient-primary"
+            context["page_name"] = "Dashboard"
 
         else:
             context["product_found"] = False
@@ -128,6 +132,13 @@ class CreateCatView(SuccessMessageMixin,CreateView):
     success_url = reverse_lazy("show_cat_subcat")
     success_message = "New Category Has Been Added Successfully"
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["active_create_category"],context["bg_create_category"] = "active","bg-gradient-primary"
+        context["page_name"] = "Create Category"
+        return context
+    
+    
 @method_decorator(login_required(login_url="signin"),name="dispatch")
 class CreateSubCategoryView(SuccessMessageMixin,CreateView):
     model = SubCategory
@@ -135,7 +146,13 @@ class CreateSubCategoryView(SuccessMessageMixin,CreateView):
     form_class = SubCategoryForm
     success_url = reverse_lazy("show_cat_subcat")
     success_message = "New Sub Category Has Been Added Successfully"
-
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["active_create_subcategory"],context["bg_create_subcategory"] = "active","bg-gradient-primary"
+        context["page_name"] = "Create SubCategory"
+        return context
+    
 
 @method_decorator(login_required(login_url="signin"),name="dispatch")
 class ListCategorySubCategoryView(ListView):
@@ -146,6 +163,8 @@ class ListCategorySubCategoryView(ListView):
     def get_context_data(self, **kwargs):
         context = super(ListCategorySubCategoryView,self).get_context_data(**kwargs)
         context["subcategory_list"] = SubCategory.objects.order_by("id") 
+        context["active_list_category"],context["bg_list_category"] = "active","bg-gradient-primary"
+        context["page_name"] = "View Category and SubCategory"
         return context
 
 
@@ -157,6 +176,13 @@ class UpdateCategoryView(SuccessMessageMixin,UpdateView):
     form_class = CategoryForm
     success_url = reverse_lazy("show_cat_subcat")
     success_message = "New Category Has Been Added Successfully"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["active_update_category"] = "active"
+        context["page_name"] = "Update Category"
+        return context
+    
      
 @method_decorator(login_required(login_url="signin"),name="dispatch")
 class UpdateSubCategoryView(SuccessMessageMixin,UpdateView):
@@ -166,6 +192,12 @@ class UpdateSubCategoryView(SuccessMessageMixin,UpdateView):
     success_url = reverse_lazy("show_cat_subcat")
     success_message = "Sub Category Has Been Updated Successfully"
     
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context["active_update_subcategory"] = "active"
+        context["page_name"] = "Update SubCategory"
+        return context
+    
     
 @method_decorator(login_required(login_url="signin"),name="dispatch")
 class CreateProductView(SuccessMessageMixin,CreateView):
@@ -174,6 +206,12 @@ class CreateProductView(SuccessMessageMixin,CreateView):
     form_class = ProductForm
     success_url = reverse_lazy("show_products")
     success_message = "New Product Has Been Added Successfully"
+    
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context["active_create_products"],context["bg_create_products"],context["page_name"] = "active","bg-gradient-primary","Create Products"
+        return context
+    
 
 @method_decorator(login_required(login_url="signin"),name="dispatch")
 class UpdateProductView(SuccessMessageMixin,UpdateView):
@@ -183,6 +221,11 @@ class UpdateProductView(SuccessMessageMixin,UpdateView):
     success_url = reverse_lazy("show_products")
     success_message = "Product Has Been Updated Successfully"
 
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        context["active_update_product"],context["page_name"]= "active","update_products"
+        return context
+ 
     
 @method_decorator(login_required(login_url="signin"),name="dispatch")
 class ListProductView(ListView):
@@ -194,11 +237,18 @@ class ListProductView(ListView):
     paginate_orphans = 4
     
     def get_context_data(self, **kwargs):
+        
         try:
-            return super(ListProductView,self).get_context_data(**kwargs)
+            context = super().get_context_data(**kwargs)
+            context["active_list_product"],context["bg_list_product"] = "active","bg-gradient-primary"
+            context["page_name"] = "View Products"
+            return context
         except Http404:
             self.kwargs["page"]=1
-            return super(ListProductView,self).get_context_data(**kwargs)
+            context =  super().get_context_data(**kwargs)
+            context["active_list_product"],context["bg_list_product"] = "active","bg-gradient-primary"
+            context["page_name"] = "View Products"
+            return context
     
 
 
@@ -208,7 +258,8 @@ def list_products_view(request):
     paginator = Paginator(products,5,orphans=2)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
-    return render(request,template_name,{"page_obj":page_obj})
+    
+    return render(request,template_name,{"page_obj":page_obj,"active_product_view":"active"})
     
 
 @method_decorator(login_required(login_url="signin"),name="dispatch")
@@ -220,6 +271,7 @@ class DetailProductView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context = {"data_exists":False}
+        context["page_name"] = "Product Detail"
         if Products.objects.filter(id=self.kwargs["pk"]).exists():
             context["data_exists"] = True
             context["product_detail"] = Products.objects.get(id=self.kwargs["pk"])
@@ -233,6 +285,7 @@ class DetailProductView(TemplateView):
 def search_products(request,id=0):
     template_name = "pages/search_products.html"
     context = {"found":False,"method":True}
+    context["page_name"] = "Search Products"
     if request.method=="GET":
         context["method"]=False
         return render(request,template_name)
@@ -265,6 +318,8 @@ class SoldFormView(SuccessMessageMixin,FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["product"] = Products.objects.get(id=self.kwargs['id'])
+        context["active_create_soldproduct"],context["bg_create_soldproduct"] = "active","bg-gradient-primary"
+        context["page_name"] = "Sell Products"
         return context
     
     
@@ -293,6 +348,7 @@ class SoldFormView(SuccessMessageMixin,FormView):
             return redirect("sold_form",self.kwargs['id'])
         return super().form_valid(form)
 
+
 @method_decorator(login_required(login_url="signin"),name="dispatch")
 class SoldUpdateView(SuccessMessageMixin,UpdateView):
     model = SoldProducts
@@ -305,6 +361,7 @@ class SoldUpdateView(SuccessMessageMixin,UpdateView):
         context = super().get_context_data(**kwargs)
         soldproducts = SoldProducts.objects.get(id=self.kwargs['pk'])
         context["product"] = Products.objects.get(id=soldproducts.product_sold.id)
+        context["page_name"] = "Update Sold Products"
         return context
     
     def form_valid(self, form):
@@ -328,7 +385,9 @@ class SoldProductsView(ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["products_sold_list"] = SoldProducts.objects.order_by("-created_on") 
+        context["products_sold_list"] = SoldProducts.objects.order_by("-created_on")
+        context["active_list_soldproduct"],context["bg_list_soldproduct"] = "active","bg-gradient-primary" 
+        context["page_name"] = "View Sold Products"
         return context
     
     def form_valid(self,form):
@@ -337,7 +396,14 @@ class SoldProductsView(ListView):
     
 def view_sold_products(request,date=0):
     template_name = "pages/sold_products_lists.html"
-    context = {"products_sold_list":None,"product_found":True,"is_paginated":False,"grand_total":False}
+    context = {"products_sold_list":None,
+               "product_found":True,
+               "is_paginated":False,
+               "grand_total":False,
+               "active_list_soldproducts":"active",
+               "bg_list_soldproducts":"bg-gradient-primary",
+               }
+    context["page_name"] = "View Sold Products"
     if request.method =="GET":
         products_sold_list = SoldProducts.objects.all()
         # context["products_sold_list"] = products_sold_list
